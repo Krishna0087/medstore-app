@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sharma Medical Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF9F4;
+    --panel:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#5B6B69;
+    --teal:#0F6B5C;
+    --teal-dark:#0B4F45;
+    --marigold:#E3A008;
+    --marigold-dark:#C4870A;
+    --line:#E7E1D4;
+    --danger:#B3452F;
+    --radius-card: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:96px;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    letter-spacing:-0.01em;
+  }
+  /* ---------- Top bar ---------- */
+  header.topbar{
+    position:sticky; top:0; z-index:30;
+    background:var(--teal);
+    color:#fff;
+    padding:18px 16px 14px;
+    border-radius:0 0 20px 20px;
+    box-shadow:0 4px 16px rgba(15,107,92,0.18);
+  }
+  .shop-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .shop-name{
+    font-size:22px; font-weight:600; color:#fff; margin:0;
+  }
+  .shop-sub{
+    font-size:12.5px; color:#CDE7E0; margin:2px 0 0;
+  }
+  .badge-open{
+    background:rgba(255,255,255,0.15);
+    color:#fff;
+    font-size:12px;
+    padding:5px 10px;
+    border-radius:999px;
+    display:flex; align-items:center; gap:6px;
+    white-space:nowrap;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:#7FE0A6;display:inline-block;}
+  .search-wrap{
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    padding:12px 14px 12px 40px;
+    border-radius:12px;
+    border:none;
+    font-size:14.5px;
+    font-family:'Work Sans', sans-serif;
+    background:#fff;
+    color:var(--ink);
+    outline:none;
+  }
+  .search-wrap input::placeholder{color:#8FA09D;}
+  .search-icon{
+    position:absolute; left:13px; top:50%; transform:translateY(-50%);
+    font-size:15px; color:#8FA09D;
+  }
+  /* ---------- Category chips ---------- */
+  .chip-row{
+    display:flex; gap:8px;
+    overflow-x:auto;
+    padding:14px 16px 4px;
+    scrollbar-width:none;
+  }
+  .chip-row::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--ink-soft);
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .chip.active{
+    background:var(--teal);
+    border-color:var(--teal);
+    color:#fff;
+  }
+  /* ---------- Product grid ---------- */
+  main{padding:6px 16px 20px;}
+  .section-title{
+    font-size:17px; font-weight:600;
+    margin:18px 2px 10px;
+    color:var(--ink);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-card);
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .card .emoji-box{
+    width:100%;
+    height:78px;
+    border-radius:10px;
+    background:#F1EFE6;
+    display:flex; align-items:center; justify-content:center;
+    font-size:34px;
+    margin-bottom:10px;
+  }
+  .card .pname{
+    font-size:14px; font-weight:600; line-height:1.25;
+    margin:0 0 3px;
+  }
+  .card .pmeta{
+    font-size:11.5px; color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  .stock-low{
+    color:var(--danger);
+    font-weight:600;
+  }
+  .card .price-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:auto;
+  }
+  .price{
+    font-size:15px; font-weight:700; color:var(--teal-dark);
+  }
+  .rx-tag{
+    font-size:10px;
+    background:#FBEAE6;
+    color:var(--danger);
+    padding:2px 6px;
+    border-radius:6px;
+    font-weight:600;
+    position:absolute;
+    top:10px; right:10px;
+  }
+  .add-btn{
+    border:none;
+    background:var(--marigold);
+    color:#2B1B00;
+    font-weight:700;
+    font-size:13px;
+    padding:7px 0;
+    border-radius:9px;
+    cursor:pointer;
+    width:64px;
+    transition:transform .1s, background .15s;
+  }
+  .add-btn:active{transform:scale(0.94);}
+  .qty-control{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--teal);
+    border-radius:9px;
+    width:76px;
+    color:#fff;
+    font-weight:700;
+    font-size:14px;
+  }
+  .qty-control button{
+    background:none; border:none; color:#fff; font-size:16px;
+    width:24px; height:26px; cursor:pointer; font-weight:700;
+  }
+  .empty-msg{
+    text-align:center; color:var(--ink-soft); font-size:14px;
+    padding:40px 10px;
+  }
+  /* ---------- Floating cart pill ---------- */
+  .cart-pill{
+    position:fixed;
+    left:16px; right:16px; bottom:16px;
+    background:var(--teal-dark);
+    color:#fff;
+    border-radius:16px;
+    padding:14px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 8px 24px rgba(11,79,69,0.35);
+    cursor:pointer;
+    z-index:40;
+    transform:translateY(120%);
+    transition:transform .25s ease;
+  }
+  .cart-pill.show{transform:translateY(0);}
+  .cart-pill .left{display:flex; flex-direction:column;}
+  .cart-pill .count{font-size:12px; color:#BFE3D8;}
+  .cart-pill .amount{font-size:16px; font-weight:700;}
+  .cart-pill .cta{
+    background:var(--marigold);
+    color:#2B1B00;
+    padding:9px 16px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:13.5px;
+  }
+  /* ---------- Sheet (cart / checkout) ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,30,29,0.45);
+    z-index:50; display:none;
+  }
+  .overlay.show{display:block;}
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0;
+    background:var(--bg);
+    border-radius:20px 20px 0 0;
+    z-index:60;
+    max-height:88vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .28s ease;
+    padding:18px 18px 24px;
+  }
+  .sheet.show{transform:translateY(0);}
+  .sheet-handle{
+    width:38px; height:4px; background:var(--line); border-radius:4px;
+    margin:0 auto 14px;
+  }
+  .sheet h2{font-size:19px; margin:0 0 14px;}
+  .cart-line{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 0; border-bottom:1px solid var(--line);
+  }
+  .cart-line .ci-name{font-size:14px; font-weight:600;}
+  .cart-line .ci-price{font-size:12.5px; color:var(--ink-soft);}
+  .cart-total-row{
+    display:flex; justify-content:space-between;
+    font-size:15px; font-weight:700;
+    padding:16px 0 6px;
+  }
+  .field{margin-bottom:12px;}
+  .field label{font-size:12.5px; color:var(--ink-soft); display:block; margin-bottom:5px;}
+  .field input, .field textarea{
+    width:100%; padding:11px 12px; border-radius:10px;
+    border:1px solid var(--line); font-family:'Work Sans'; font-size:14px;
+    background:#fff; color:var(--ink);
+  }
+  .primary-btn{
+    width:100%; background:var(--teal); color:#fff; border:none;
+    padding:14px; border-radius:12px; font-size:15px; font-weight:700;
+    cursor:pointer; margin-top:6px;
+  }
+  .primary-btn:active{transform:scale(0.98);}
+  .pay-note{
+    font-size:12px; color:var(--ink-soft); text-align:center; margin-top:10px;
+  }
+  .order-success{
+    text-align:center; padding:20px 10px;
+  }
+  .order-success .tick{
+    width:56px; height:56px; border-radius:50%;
+    background:var(--teal); color:#fff; font-size:28px;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 14px;
+  }
+  .order-id{
+    font-size:13px; color:var(--ink-soft); margin-top:4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="shop-row">
+    <div>
+      <h1 class="shop-name">Sharma Medical Store</h1>
+      <p class="shop-sub">Delivering to your home, since day one</p>
+    </div>
+    <div class="badge-open"><span class="dot"></span>Open now</div>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="searchInput" type="text" placeholder="Search medicines, brands, health needs">
+  </div>
+</header>
+
+<div class="chip-row" id="chipRow"></div>
+
+<main>
+  <div class="section-title" id="sectionTitle">All products</div>
+  <div class="grid" id="productGrid"></div>
+  <div class="empty-msg" id="emptyMsg" style="display:none;">No products match your search.</div>
+</main>
+
+<div class="cart-pill" id="cartPill">
+  <div class="left">
+    <span class="count" id="cartCount">0 items</span>
+    <span class="amount" id="cartAmount">₹0</span>
+  </div>
+  <div class="cta">View cart →</div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- Cart sheet -->
+<div class="sheet" id="cartSheet">
+  <div class="sheet-handle"></div>
+  <h2>Your cart</h2>
+  <div id="cartLines"></div>
+  <div class="cart-total-row"><span>Total</span><span id="cartTotal">₹0</span></div>
+  <button class="primary-btn" id="goCheckoutBtn">Proceed to checkout</button>
+</div>
+
+<!-- Checkout sheet -->
+<div class="sheet" id="checkoutSheet">
+  <div class="sheet-handle"></div>
+  <h2>Delivery details</h2>
+  <div class="field">
+    <label>Full name</label>
+    <input type="text" id="custName" placeholder="Your name">
+  </div>
+  <div class="field">
+    <label>Phone number</label>
+    <input type="tel" id="custPhone" placeholder="10-digit mobile number">
+  </div>
+  <div class="field">
+    <label>Delivery address</label>
+    <textarea id="custAddress" rows="3" placeholder="House no, street, landmark"></textarea>
+  </div>
+  <div class="cart-total-row"><span>To pay (Cash on delivery)</span><span id="checkoutTotal">₹0</span></div>
+  <button class="primary-btn" id="placeOrderBtn">Place order</button>
+  <p class="pay-note">Pay in cash when your order arrives.</p>
+</div>
+
+<!-- Order success sheet -->
+<div class="sheet" id="successSheet">
+  <div class="order-success">
+    <div class="tick">✓</div>
+    <h2 style="margin-bottom:4px;">Order placed!</h2>
+    <p style="color:var(--ink-soft); font-size:14px; margin:0;">Sharma Medical Store will prepare your order shortly.</p>
+    <p class="order-id" id="orderIdLine"></p>
+    <button class="primary-btn" id="closeSuccessBtn" style="margin-top:20px;">Back to shop</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, addDoc, doc, setDoc,
+  onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ---------------- Firebase setup ----------------
+const firebaseConfig = {
+  apiKey: "AIzaSyCTZZZSpsXBki2IvFeHX8vB6IuUnhPLWa4",
+  authDomain: "medical-1f0af.firebaseapp.com",
+  projectId: "medical-1f0af",
+  storageBucket: "medical-1f0af.firebasestorage.app",
+  messagingSenderId: "67439356495",
+  appId: "1:67439356495:web:e6bf86777d3a28343f983a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const productsCol = collection(db, "products");
+const ordersCol = collection(db, "orders");
+
+// ---------------- Seed default products (only runs once, if Firestore is empty) ----------------
+const DEFAULT_PRODUCTS = [
+  {id:"p1", name:"Paracetamol 500mg (10 tabs)", cat:"Fever & Pain", price:20, stock:40, rx:false, emoji:"💊"},
+  {id:"p2", name:"ORS Rehydration Sachets (5x)", cat:"Wellness", price:35, stock:25, rx:false, emoji:"🧂"},
+  {id:"p3", name:"Cough Syrup 100ml", cat:"Cold & Cough", price:65, stock:12, rx:false, emoji:"🍯"},
+  {id:"p4", name:"Amoxicillin 500mg (10 tabs)", cat:"Antibiotics", price:85, stock:18, rx:true, emoji:"💊"},
+  {id:"p5", name:"Digital Thermometer", cat:"Devices", price:180, stock:8, rx:false, emoji:"🌡️"},
+  {id:"p6", name:"Antiseptic Liquid 100ml", cat:"First Aid", price:55, stock:20, rx:false, emoji:"🧴"},
+  {id:"p7", name:"Vitamin C Tablets (15)", cat:"Wellness", price:90, stock:30, rx:false, emoji:"🍊"},
+  {id:"p8", name:"Band-Aid Strips (20)", cat:"First Aid", price:40, stock:3, rx:false, emoji:"🩹"},
+  {id:"p9", name:"Antacid Tablets (10)", cat:"Fever & Pain", price:28, stock:22, rx:false, emoji:"💊"},
+  {id:"p10", name:"Baby Diaper Rash Cream", cat:"Baby Care", price:110, stock:14, rx:false, emoji:"🧴"},
+  {id:"p11", name:"Blood Pressure Monitor", cat:"Devices", price:1250, stock:5, rx:false, emoji:"🩺"},
+  {id:"p12", name:"Multivitamin Syrup 200ml", cat:"Wellness", price:150, stock:10, rx:false, emoji:"🍯"},
+];
+
+async function seedProductsIfEmpty(){
+  const snap = await getDocs(productsCol);
+  if(snap.empty){
+    for(const p of DEFAULT_PRODUCTS){
+      await setDoc(doc(db, "products", p.id), p);
+    }
+  }
+}
+
+// ---------------- App state ----------------
+let PRODUCTS = [];       // filled live from Firestore
+let CATEGORIES = ["All"];
+let cart = {}; // {id: qty}
+let activeCategory = "All";
+let searchTerm = "";
+
+const grid = document.getElementById('productGrid');
+const chipRow = document.getElementById('chipRow');
+const emptyMsg = document.getElementById('emptyMsg');
+const sectionTitle = document.getElementById('sectionTitle');
+
+function renderChips(){
+  chipRow.innerHTML = CATEGORIES.map(c =>
+    `<div class="chip ${c===activeCategory?'active':''}" data-cat="${c}">${c}</div>`
+  ).join('');
+  chipRow.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      activeCategory = el.getAttribute('data-cat');
+      renderChips();
+      renderGrid();
+    });
+  });
+}
+
+function getFiltered(){
+  return PRODUCTS.filter(p=>{
+    const matchesCat = activeCategory==="All" || p.cat===activeCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
+}
+
+function renderGrid(){
+  const list = getFiltered();
+  sectionTitle.textContent = activeCategory==="All" ? "All products" : activeCategory;
+  emptyMsg.style.display = list.length ? "none" : "block";
+  grid.innerHTML = list.map(p=>{
+    const qty = cart[p.id] || 0;
+    const lowStock = p.stock <= 5;
+    return `
+    <div class="card">
+      ${p.rx ? '<div class="rx-tag">Rx</div>' : ''}
+      <div class="emoji-box">${p.emoji}</div>
+      <p class="pname">${p.name}</p>
+      <p class="pmeta">${lowStock ? `<span class="stock-low">Only ${p.stock} left</span>` : `In stock`}</p>
+      <div class="price-row">
+        <span class="price">₹${p.price}</span>
+        ${qty === 0
+          ? `<button class="add-btn" data-id="${p.id}">Add</button>`
+          : `<div class="qty-control">
+               <button data-id="${p.id}" data-action="dec">−</button>
+               <span>${qty}</span>
+               <button data-id="${p.id}" data-action="inc">+</button>
+             </div>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.add-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      cart[id] = 1;
+      renderGrid();
+      updateCartPill();
+    });
+  });
+  grid.querySelectorAll('.qty-control button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      const action = btn.getAttribute('data-action');
+      if(action==='inc') cart[id] = (cart[id]||0)+1;
+      if(action==='dec'){
+        cart[id] = (cart[id]||0)-1;
+        if(cart[id]<=0) delete cart[id];
+      }
+      renderGrid();
+      updateCartPill();
+    });
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  searchTerm = e.target.value;
+  renderGrid();
+});
+
+function cartTotal(){
+  return Object.entries(cart).reduce((sum,[id,qty])=>{
+    const p = PRODUCTS.find(p=>p.id==id);
+    return sum + (p ? p.price*qty : 0);
+  },0);
+}
+function cartCount(){
+  return Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+const cartPill = document.getElementById('cartPill');
+function updateCartPill(){
+  const count = cartCount();
+  document.getElementById('cartCount').textContent = `${count} item${count!==1?'s':''}`;
+  document.getElementById('cartAmount').textContent = `₹${cartTotal()}`;
+  cartPill.classList.toggle('show', count>0);
+}
+
+// ---------------- Sheets ----------------
+const overlay = document.getElementById('overlay');
+const cartSheet = document.getElementById('cartSheet');
+const checkoutSheet = document.getElementById('checkoutSheet');
+const successSheet = document.getElementById('successSheet');
+
+function openSheet(sheet){
+  overlay.classList.add('show');
+  sheet.classList.add('show');
+}
+function closeAllSheets(){
+  overlay.classList.remove('show');
+  [cartSheet, checkoutSheet, successSheet].forEach(s=>s.classList.remove('show'));
+}
+overlay.addEventListener('click', closeAllSheets);
+
+cartPill.addEventListener('click', ()=>{
+  renderCartLines();
+  openSheet(cartSheet);
+});
+
+function renderCartLines(){
+  const entries = Object.entries(cart);
+  const container = document.getElementById('cartLines');
+  if(entries.length===0){
+    container.innerHTML = `<p class="empty-msg">Your cart is empty.</p>`;
+  } else {
+    container.innerHTML = entries.map(([id,qty])=>{
+      const p = PRODUCTS.find(p=>p.id==id);
+      return `<div class="cart-line">
+        <div>
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-price">${qty} × ₹${p.price}</div>
+        </div>
+        <div class="ci-price">₹${p.price*qty}</div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('cartTotal').textContent = `₹${cartTotal()}`;
+}
+
+document.getElementById('goCheckoutBtn').addEventListener('click', ()=>{
+  if(cartCount()===0) return;
+  document.getElementById('checkoutTotal').textContent = `₹${cartTotal()}`;
+  openSheet(checkoutSheet);
+  cartSheet.classList.remove('show');
+});
+
+document.getElementById('placeOrderBtn').addEventListener('click', async ()=>{
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  if(!name || !phone || !address){
+    alert("Please fill in your name, phone number, and address.");
+    return;
+  }
+  if(!/^\d{10}$/.test(phone)){
+    alert("Please enter a valid 10-digit phone number.");
+    return;
+  }
+
+  const placeBtn = document.getElementById('placeOrderBtn');
+  placeBtn.disabled = true;
+  placeBtn.textContent = "Placing order...";
+
+  const orderItems = Object.entries(cart).map(([id,qty])=>{
+    const p = PRODUCTS.find(p=>p.id==id);
+    return { productId:id, name:p.name, price:p.price, qty };
+  });
+  const total = cartTotal();
+
+  try{
+    const orderRef = await addDoc(ordersCol, {
+      customerName: name,
+      phone: phone,
+      address: address,
+      items: orderItems,
+      total: total,
+      status: "Placed",
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById('orderIdLine').textContent = `Order ID: ${orderRef.id.slice(0,8).toUpperCase()}`;
+    cart = {};
+    updateCartPill();
+    document.getElementById('custName').value='';
+    document.getElementById('custPhone').value='';
+    document.getElementById('custAddress').value='';
+    checkoutSheet.classList.remove('show');
+    openSheet(successSheet);
+  } catch(err){
+    alert("Order could not be placed. Please check your internet connection and try again.");
+    console.error(err);
+  } finally {
+    placeBtn.disabled = false;
+    placeBtn.textContent = "Place order";
+  }
+});
+
+document.getElementById('closeSuccessBtn').addEventListener('click', ()=>{
+  closeAllSheets();
+  renderGrid();
+});
+
+// ---------------- Init ----------------
+grid.innerHTML = `<p class="empty-msg">Loading medicines...</p>`;
+
+seedProductsIfEmpty().then(()=>{
+  // Listen live so any change the shop owner makes in Firestore shows up instantly
+  onSnapshot(productsCol, (snapshot)=>{
+    PRODUCTS = snapshot.docs.map(d => ({ id:d.id, ...d.data() }));
+    CATEGORIES = ["All", ...new Set(PRODUCTS.map(p=>p.cat))];
+    renderChips();
+    renderGrid();
+    updateCartPill();
+  }, (err)=>{
+    console.error(err);
+    grid.innerHTML = `<p class="empty-msg">Could not load medicines. Check your internet connection.</p>`;
+  });
+});
+</script>
+
+</body>
+</html>
