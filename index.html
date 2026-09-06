@@ -28,7 +28,7 @@
     color:var(--ink);
     font-family:'Work Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
-    padding-bottom:96px;
+    padding-bottom:76px;
   }
   h1,h2,h3,.display{
     font-family:'Fraunces', serif;
@@ -224,10 +224,108 @@
     text-align:center; color:var(--ink-soft); font-size:14px;
     padding:40px 10px;
   }
+  /* ---------- Bottom nav bar ---------- */
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    display:flex;
+    z-index:35;
+    box-shadow:0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .nav-item{
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:9px 0 8px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    position:relative;
+  }
+  .nav-item .nav-icon{font-size:19px;}
+  .nav-item .nav-label{font-size:10.5px; font-weight:600;}
+  .nav-item.active{color:var(--teal-dark);}
+  .nav-badge{
+    position:absolute; top:2px; right:calc(50% - 20px);
+    background:var(--marigold); color:#2B1B00;
+    font-size:10px; font-weight:700;
+    min-width:16px; height:16px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0 4px;
+  }
+  /* ---------- Product detail sheet ---------- */
+  .detail-photo{
+    width:100%; height:220px; border-radius:16px; overflow:hidden;
+    background:#F1EFE6; display:flex; align-items:center; justify-content:center;
+    font-size:70px; margin-bottom:16px; cursor:zoom-in; position:relative;
+  }
+  .detail-photo img{width:100%; height:100%; object-fit:cover;}
+  .zoom-hint{
+    position:absolute; bottom:8px; right:8px;
+    background:rgba(0,0,0,0.55); color:#fff; font-size:10.5px;
+    padding:4px 8px; border-radius:7px;
+  }
+  .detail-name{font-size:19px; font-weight:600; margin:0 0 6px;}
+  .detail-price{font-size:20px; font-weight:700; color:var(--teal-dark); margin:0 0 4px;}
+  .detail-stock{font-size:12.5px; color:var(--ink-soft); margin-bottom:16px;}
+  .detail-qty-row{
+    display:flex; align-items:center; gap:14px; margin-bottom:16px;
+  }
+  .detail-qty-control{
+    display:flex; align-items:center; gap:16px;
+    background:var(--bg); border:1px solid var(--line);
+    border-radius:12px; padding:8px 16px;
+  }
+  .detail-qty-control button{
+    background:var(--teal); color:#fff; border:none; width:30px; height:30px;
+    border-radius:8px; font-size:17px; font-weight:700; cursor:pointer;
+  }
+  .detail-qty-control span{font-size:16px; font-weight:700; min-width:20px; text-align:center;}
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,15,15,0.94);
+    z-index:100; display:none; align-items:center; justify-content:center;
+    overflow:hidden; touch-action:none;
+  }
+  .lightbox.show{display:flex;}
+  .lightbox img{
+    max-width:100%; max-height:100%; touch-action:none;
+    transition:transform .15s ease-out;
+  }
+  .lightbox-close{
+    position:absolute; top:18px; right:18px; z-index:101;
+    background:rgba(255,255,255,0.15); color:#fff; border:none;
+    width:38px; height:38px; border-radius:50%; font-size:20px; cursor:pointer;
+  }
+  .lightbox-tip{
+    position:absolute; bottom:24px; left:0; right:0; text-align:center;
+    color:#BFE4D9; font-size:12px;
+  }
+  /* ---------- My Orders ---------- */
+  .my-orders-intro{font-size:13.5px; color:var(--ink-soft); margin-bottom:14px;}
+  .order-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:14px; margin-bottom:12px;
+  }
+  .order-card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .order-card-id{font-size:12.5px; color:var(--ink-soft);}
+  .order-status-badge{
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px;
+  }
+  .os-Placed{background:#FEF3D6; color:#8A6300;}
+  .os-Packed{background:#E1EFFB; color:#22588A;}
+  .os-Out-for-delivery{background:#EBE1FB; color:#5B2A8A;}
+  .os-Delivered{background:#DFF3E9; color:#1F7A4D;}
+  .os-Cancelled{background:#FBEAE6; color:var(--danger);}
+  .order-card-items{font-size:12.5px; color:var(--ink-soft); margin:6px 0; padding-left:16px;}
+  .order-card-total{font-weight:700; font-size:14px; margin-top:4px;}
+  .cancel-btn{
+    margin-top:10px; width:100%; background:#FBEAE6; color:var(--danger);
+    border:none; padding:10px; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;
+  }
   /* ---------- Floating cart pill ---------- */
   .cart-pill{
     position:fixed;
-    left:16px; right:16px; bottom:16px;
+    left:16px; right:16px; bottom:70px;
     background:linear-gradient(135deg, var(--teal-dark), var(--teal));
     color:#fff;
     border-radius:18px;
@@ -407,11 +505,63 @@
   </div>
 </div>
 
+<!-- Product detail sheet -->
+<div class="sheet" id="detailSheet">
+  <div class="sheet-handle"></div>
+  <div class="detail-photo" id="detailPhoto"></div>
+  <p class="detail-name" id="detailName"></p>
+  <p class="detail-price" id="detailPrice"></p>
+  <p class="detail-stock" id="detailStock"></p>
+  <div class="detail-qty-row">
+    <div class="detail-qty-control">
+      <button id="detailMinus">−</button>
+      <span id="detailQty">1</span>
+      <button id="detailPlus">+</button>
+    </div>
+  </div>
+  <button class="primary-btn" id="detailAddBtn">Add to cart</button>
+</div>
+
+<!-- Lightbox for zooming product photo -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="">
+  <div class="lightbox-tip">Pinch or double-tap to zoom</div>
+</div>
+
+<!-- My Orders sheet -->
+<div class="sheet" id="ordersSheet">
+  <div class="sheet-handle"></div>
+  <h2>My orders</h2>
+  <p class="my-orders-intro">Enter the phone number you used while ordering to see your orders.</p>
+  <div class="field">
+    <input type="tel" id="ordersPhoneInput" placeholder="10-digit mobile number">
+  </div>
+  <button class="primary-btn" id="findOrdersBtn">Find my orders</button>
+  <div id="myOrdersList" style="margin-top:16px;"></div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active" id="navHome">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </div>
+  <div class="nav-item" id="navOrders">
+    <span class="nav-icon">🧾</span>
+    <span class="nav-label">My Orders</span>
+  </div>
+  <div class="nav-item" id="navCart">
+    <span class="nav-icon">🛒</span>
+    <span class="nav-label">Cart</span>
+    <span class="nav-badge" id="navCartBadge" style="display:none;"></span>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore, collection, getDocs, addDoc, doc, setDoc,
-  onSnapshot, serverTimestamp
+  onSnapshot, serverTimestamp, query, where, updateDoc, orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ---------------- Firebase setup ----------------
@@ -495,7 +645,7 @@ function renderGrid(){
     const qty = cart[p.id] || 0;
     const lowStock = p.stock <= 5;
     return `
-    <div class="card">
+    <div class="card" data-detail-id="${p.id}">
       ${p.rx ? '<div class="rx-tag">Rx</div>' : ''}
       ${p.imageUrl
         ? `<div class="emoji-box" style="padding:0; overflow:hidden;"><img src="${p.imageUrl}" style="width:100%; height:100%; object-fit:cover;"></div>`
@@ -516,6 +666,14 @@ function renderGrid(){
       </div>
     </div>`;
   }).join('');
+
+  grid.querySelectorAll('.card').forEach(cardEl=>{
+    cardEl.addEventListener('click', (e)=>{
+      // Don't open detail if the tap was on the Add/qty controls
+      if(e.target.closest('.add-btn') || e.target.closest('.qty-control')) return;
+      openProductDetail(cardEl.getAttribute('data-detail-id'));
+    });
+  });
 
   grid.querySelectorAll('.add-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -582,6 +740,7 @@ overlay.addEventListener('click', closeAllSheets);
 cartPill.addEventListener('click', ()=>{
   renderCartLines();
   openSheet(cartSheet);
+  setTimeout(()=>{ if(typeof setActiveNav === 'function') setActiveNav(navCart); }, 0);
 });
 
 function renderCartLines(){
@@ -665,6 +824,194 @@ document.getElementById('placeOrderBtn').addEventListener('click', async ()=>{
 document.getElementById('closeSuccessBtn').addEventListener('click', ()=>{
   closeAllSheets();
   renderGrid();
+});
+
+// ---------------- Product detail sheet ----------------
+let detailQty = 1;
+let currentDetailProduct = null;
+
+function openProductDetail(id){
+  const p = PRODUCTS.find(p=>p.id==id);
+  if(!p) return;
+  currentDetailProduct = p;
+  detailQty = cart[p.id] || 1;
+
+  const photoEl = document.getElementById('detailPhoto');
+  if(p.imageUrl){
+    photoEl.innerHTML = `<img src="${p.imageUrl}" id="detailImgTag"><span class="zoom-hint">Tap to zoom 🔍</span>`;
+  } else {
+    photoEl.innerHTML = p.emoji;
+  }
+  document.getElementById('detailName').textContent = p.name;
+  document.getElementById('detailPrice').textContent = `₹${p.price}`;
+  document.getElementById('detailStock').textContent = p.stock <= 5
+    ? `Only ${p.stock} left in stock`
+    : `In stock · ${p.cat || 'General'}`;
+  document.getElementById('detailQty').textContent = detailQty;
+
+  photoEl.onclick = ()=>{ if(p.imageUrl) openLightbox(p.imageUrl); };
+
+  openSheet(document.getElementById('detailSheet'));
+}
+
+document.getElementById('detailMinus').addEventListener('click', ()=>{
+  if(detailQty > 1) detailQty--;
+  document.getElementById('detailQty').textContent = detailQty;
+});
+document.getElementById('detailPlus').addEventListener('click', ()=>{
+  detailQty++;
+  document.getElementById('detailQty').textContent = detailQty;
+});
+document.getElementById('detailAddBtn').addEventListener('click', ()=>{
+  if(!currentDetailProduct) return;
+  cart[currentDetailProduct.id] = detailQty;
+  renderGrid();
+  updateCartPill();
+  updateNavCartBadge();
+  closeAllSheets();
+});
+
+// ---------------- Lightbox (pinch + double-tap zoom) ----------------
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+let lbScale = 1, lbPanX = 0, lbPanY = 0;
+let lbLastDist = null, lbLastTap = 0;
+
+function openLightbox(src){
+  lightboxImg.src = src;
+  lbScale = 1; lbPanX = 0; lbPanY = 0;
+  applyLbTransform();
+  lightbox.classList.add('show');
+}
+document.getElementById('lightboxClose').addEventListener('click', ()=>{
+  lightbox.classList.remove('show');
+});
+function applyLbTransform(){
+  lightboxImg.style.transform = `translate(${lbPanX}px, ${lbPanY}px) scale(${lbScale})`;
+}
+function dist(touches){
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx*dx + dy*dy);
+}
+lightbox.addEventListener('touchstart', (e)=>{
+  if(e.touches.length === 2){
+    lbLastDist = dist(e.touches);
+  } else if(e.touches.length === 1){
+    const now = Date.now();
+    if(now - lbLastTap < 300){
+      // double tap toggle zoom
+      lbScale = lbScale > 1 ? 1 : 2.2;
+      lbPanX = 0; lbPanY = 0;
+      applyLbTransform();
+    }
+    lbLastTap = now;
+  }
+}, {passive:true});
+lightbox.addEventListener('touchmove', (e)=>{
+  if(e.touches.length === 2 && lbLastDist){
+    const newDist = dist(e.touches);
+    const delta = newDist / lbLastDist;
+    lbScale = Math.min(Math.max(lbScale * delta, 1), 4);
+    lbLastDist = newDist;
+    applyLbTransform();
+  } else if(e.touches.length === 1 && lbScale > 1){
+    lbPanX += e.touches[0].movementX || 0;
+    lbPanY += e.touches[0].movementY || 0;
+    applyLbTransform();
+  }
+}, {passive:true});
+lightbox.addEventListener('touchend', (e)=>{
+  if(e.touches.length < 2) lbLastDist = null;
+});
+lightboxImg.addEventListener('dblclick', ()=>{
+  lbScale = lbScale > 1 ? 1 : 2.2;
+  lbPanX = 0; lbPanY = 0;
+  applyLbTransform();
+});
+
+// ---------------- Bottom nav ----------------
+const navHome = document.getElementById('navHome');
+const navOrders = document.getElementById('navOrders');
+const navCart = document.getElementById('navCart');
+
+function setActiveNav(el){
+  [navHome, navOrders, navCart].forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+navHome.addEventListener('click', ()=>{
+  setActiveNav(navHome);
+  closeAllSheets();
+});
+navOrders.addEventListener('click', ()=>{
+  setActiveNav(navOrders);
+  openSheet(document.getElementById('ordersSheet'));
+});
+navCart.addEventListener('click', ()=>{
+  setActiveNav(navCart);
+  renderCartLines();
+  openSheet(cartSheet);
+});
+
+function updateNavCartBadge(){
+  const count = cartCount();
+  const badge = document.getElementById('navCartBadge');
+  if(count > 0){
+    badge.textContent = count;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// When any sheet closes via overlay tap, reset nav to Home
+overlay.addEventListener('click', ()=>{ setActiveNav(navHome); });
+
+// ---------------- My Orders ----------------
+document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
+  const phone = document.getElementById('ordersPhoneInput').value.trim();
+  const listEl = document.getElementById('myOrdersList');
+  if(!/^\d{10}$/.test(phone)){
+    alert("Please enter a valid 10-digit phone number.");
+    return;
+  }
+  listEl.innerHTML = `<p class="empty-msg">Searching...</p>`;
+  try{
+    const q = query(ordersCol, where("phone", "==", phone), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+    if(snap.empty){
+      listEl.innerHTML = `<p class="empty-msg">No orders found for this number.</p>`;
+      return;
+    }
+    listEl.innerHTML = snap.docs.map(d=>{
+      const o = d.data();
+      const itemsHtml = (o.items||[]).map(i=>`<li>${i.qty} × ${i.name}</li>`).join('');
+      const statusClass = "os-" + (o.status||"Placed").replace(/ /g,'-');
+      const canCancel = (o.status === "Placed" || !o.status);
+      return `
+      <div class="order-card">
+        <div class="order-card-head">
+          <span class="order-card-id">Order #${d.id.slice(0,8).toUpperCase()}</span>
+          <span class="order-status-badge ${statusClass}">${o.status || 'Placed'}</span>
+        </div>
+        <ul class="order-card-items">${itemsHtml}</ul>
+        <div class="order-card-total">Total: ₹${o.total}</div>
+        ${canCancel ? `<button class="cancel-btn" data-order-id="${d.id}">Cancel this order</button>` : ''}
+      </div>`;
+    }).join('');
+
+    listEl.querySelectorAll('.cancel-btn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        if(confirm("Cancel this order?")){
+          await updateDoc(doc(db, "orders", btn.getAttribute('data-order-id')), { status: "Cancelled" });
+          document.getElementById('findOrdersBtn').click();
+        }
+      });
+    });
+  } catch(err){
+    console.error(err);
+    listEl.innerHTML = `<p class="empty-msg">Could not load orders. Check your internet connection.</p>`;
+  }
 });
 
 // ---------------- Init ----------------
