@@ -8,17 +8,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FBF9F4;
+    --bg:#F7F6FB;
     --panel:#FFFFFF;
-    --ink:#1C2B2A;
-    --ink-soft:#5B6B69;
-    --teal:#0F6B5C;
-    --teal-dark:#0A3F38;
-    --teal-light:#16876F;
-    --marigold:#E3A008;
-    --marigold-dark:#C4870A;
-    --line:#E7E1D4;
-    --danger:#B3452F;
+    --ink:#1E1B3A;
+    --ink-soft:#6B6785;
+    --teal:#4F46E5;
+    --teal-dark:#372F94;
+    --teal-light:#6D63F0;
+    --marigold:#FF6F59;
+    --marigold-dark:#E5573F;
+    --line:#E7E4F5;
+    --danger:#D6465A;
     --radius-card: 16px;
   }
   *{box-sizing:border-box;}
@@ -137,6 +137,25 @@
     text-align:center; line-height:1.2;
   }
   .cat-tile.active .cat-label{color:var(--teal-dark);}
+  /* ---------- Home sections (category rails) ---------- */
+  .home-section{margin-bottom:4px;}
+  .home-section-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin:20px 2px 12px;
+  }
+  .home-section-head h3{font-size:16.5px; font-weight:600; color:var(--ink);}
+  .see-all{
+    font-size:12.5px; font-weight:700; color:var(--teal);
+    cursor:pointer; white-space:nowrap;
+  }
+  .h-scroll-row{
+    display:flex; gap:12px; overflow-x:auto; padding:0 16px 6px;
+    margin:0 -16px; scrollbar-width:none;
+  }
+  .h-scroll-row::-webkit-scrollbar{display:none;}
+  .h-card{
+    flex:0 0 auto; width:136px;
+  }
   /* ---------- Product grid ---------- */
   main{padding:6px 16px 20px;}
   .section-title{
@@ -455,7 +474,8 @@
 <div class="chip-row" id="chipRow"></div>
 
 <main>
-  <div class="section-title" id="sectionTitle">All products</div>
+  <div id="homeSections"></div>
+  <div class="section-title" id="sectionTitle" style="display:none;"></div>
   <div class="grid" id="productGrid"></div>
   <div class="empty-msg" id="emptyMsg" style="display:none;">No products match your search.</div>
 </main>
@@ -621,6 +641,117 @@ const grid = document.getElementById('productGrid');
 const chipRow = document.getElementById('chipRow');
 const emptyMsg = document.getElementById('emptyMsg');
 const sectionTitle = document.getElementById('sectionTitle');
+const homeSections = document.getElementById('homeSections');
+
+function isHomeView(){
+  return activeCategory === "All" && searchTerm.trim() === "";
+}
+
+function showCategory(cat){
+  activeCategory = cat;
+  renderChips();
+  renderMain();
+}
+
+function buildCardHtml(p){
+  const qty = cart[p.id] || 0;
+  const lowStock = p.stock <= 5;
+  return `
+  <div class="card" data-detail-id="${p.id}">
+    ${p.rx ? '<div class="rx-tag">Rx</div>' : ''}
+    ${p.imageUrl
+      ? `<div class="emoji-box" style="padding:0; overflow:hidden;"><img src="${p.imageUrl}" style="width:100%; height:100%; object-fit:cover;"></div>`
+      : `<div class="emoji-box">${p.emoji}</div>`
+    }
+    <p class="pname">${p.name}</p>
+    <p class="pmeta">${lowStock ? `<span class="stock-low">Only ${p.stock} left</span>` : `In stock`}</p>
+    <div class="price-row">
+      <span class="price">₹${p.price}</span>
+      ${qty === 0
+        ? `<button class="add-btn" data-id="${p.id}">Add</button>`
+        : `<div class="qty-control">
+             <button data-id="${p.id}" data-action="dec">−</button>
+             <span>${qty}</span>
+             <button data-id="${p.id}" data-action="inc">+</button>
+           </div>`
+      }
+    </div>
+  </div>`;
+}
+
+function wireCardEvents(container){
+  container.querySelectorAll('.card').forEach(cardEl=>{
+    cardEl.addEventListener('click', (e)=>{
+      if(e.target.closest('.add-btn') || e.target.closest('.qty-control')) return;
+      openProductDetail(cardEl.getAttribute('data-detail-id'));
+    });
+  });
+  container.querySelectorAll('.add-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      cart[id] = 1;
+      renderMain();
+      updateCartPill();
+      updateNavCartBadge();
+    });
+  });
+  container.querySelectorAll('.qty-control button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      const action = btn.getAttribute('data-action');
+      if(action==='inc') cart[id] = (cart[id]||0)+1;
+      if(action==='dec'){
+        cart[id] = (cart[id]||0)-1;
+        if(cart[id]<=0) delete cart[id];
+      }
+      renderMain();
+      updateCartPill();
+      updateNavCartBadge();
+    });
+  });
+}
+
+function renderMain(){
+  if(isHomeView()){
+    homeSections.style.display = 'block';
+    sectionTitle.style.display = 'none';
+    grid.style.display = 'none';
+    emptyMsg.style.display = 'none';
+    renderHomeSections();
+  } else {
+    homeSections.style.display = 'none';
+    sectionTitle.style.display = 'block';
+    grid.style.display = 'grid';
+    renderGrid();
+  }
+}
+
+function renderHomeSections(){
+  const cats = CATEGORIES.filter(c => c !== "All");
+  if(cats.length === 0){
+    homeSections.innerHTML = `<p class="empty-msg">No medicines yet — check back soon.</p>`;
+    return;
+  }
+  homeSections.innerHTML = cats.map(cat=>{
+    const items = PRODUCTS.filter(p=>p.cat===cat).slice(0, 10);
+    if(items.length === 0) return '';
+    return `
+    <div class="home-section">
+      <div class="home-section-head">
+        <h3>${getCategoryIcon(cat)} ${cat}</h3>
+        <span class="see-all" data-cat="${cat}">See all →</span>
+      </div>
+      <div class="h-scroll-row">
+        ${items.map(p => `<div class="h-card">${buildCardHtml(p)}</div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  homeSections.querySelectorAll('.see-all').forEach(el=>{
+    el.addEventListener('click', ()=> showCategory(el.getAttribute('data-cat')));
+  });
+  wireCardEvents(homeSections);
+}
 
 // Maps category names to an icon. Add more mappings here if the owner uses new category names.
 const CATEGORY_ICONS = {
@@ -647,9 +778,7 @@ function renderChips(){
   ).join('');
   chipRow.querySelectorAll('.cat-tile').forEach(el=>{
     el.addEventListener('click', ()=>{
-      activeCategory = el.getAttribute('data-cat');
-      renderChips();
-      renderGrid();
+      showCategory(el.getAttribute('data-cat'));
     });
   });
 }
@@ -664,68 +793,15 @@ function getFiltered(){
 
 function renderGrid(){
   const list = getFiltered();
-  sectionTitle.textContent = activeCategory==="All" ? "All products" : activeCategory;
+  sectionTitle.textContent = searchTerm.trim() ? `Results for "${searchTerm}"` : activeCategory;
   emptyMsg.style.display = list.length ? "none" : "block";
-  grid.innerHTML = list.map(p=>{
-    const qty = cart[p.id] || 0;
-    const lowStock = p.stock <= 5;
-    return `
-    <div class="card" data-detail-id="${p.id}">
-      ${p.rx ? '<div class="rx-tag">Rx</div>' : ''}
-      ${p.imageUrl
-        ? `<div class="emoji-box" style="padding:0; overflow:hidden;"><img src="${p.imageUrl}" style="width:100%; height:100%; object-fit:cover;"></div>`
-        : `<div class="emoji-box">${p.emoji}</div>`
-      }
-      <p class="pname">${p.name}</p>
-      <p class="pmeta">${lowStock ? `<span class="stock-low">Only ${p.stock} left</span>` : `In stock`}</p>
-      <div class="price-row">
-        <span class="price">₹${p.price}</span>
-        ${qty === 0
-          ? `<button class="add-btn" data-id="${p.id}">Add</button>`
-          : `<div class="qty-control">
-               <button data-id="${p.id}" data-action="dec">−</button>
-               <span>${qty}</span>
-               <button data-id="${p.id}" data-action="inc">+</button>
-             </div>`
-        }
-      </div>
-    </div>`;
-  }).join('');
-
-  grid.querySelectorAll('.card').forEach(cardEl=>{
-    cardEl.addEventListener('click', (e)=>{
-      // Don't open detail if the tap was on the Add/qty controls
-      if(e.target.closest('.add-btn') || e.target.closest('.qty-control')) return;
-      openProductDetail(cardEl.getAttribute('data-detail-id'));
-    });
-  });
-
-  grid.querySelectorAll('.add-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.getAttribute('data-id');
-      cart[id] = 1;
-      renderGrid();
-      updateCartPill();
-    });
-  });
-  grid.querySelectorAll('.qty-control button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.getAttribute('data-id');
-      const action = btn.getAttribute('data-action');
-      if(action==='inc') cart[id] = (cart[id]||0)+1;
-      if(action==='dec'){
-        cart[id] = (cart[id]||0)-1;
-        if(cart[id]<=0) delete cart[id];
-      }
-      renderGrid();
-      updateCartPill();
-    });
-  });
+  grid.innerHTML = list.map(p => buildCardHtml(p)).join('');
+  wireCardEvents(grid);
 }
 
 document.getElementById('searchInput').addEventListener('input', (e)=>{
   searchTerm = e.target.value;
-  renderGrid();
+  renderMain();
 });
 
 function cartTotal(){
@@ -755,12 +831,25 @@ const successSheet = document.getElementById('successSheet');
 function openSheet(sheet){
   overlay.classList.add('show');
   sheet.classList.add('show');
+  history.pushState({ sheetOpen: true }, '');
 }
-function closeAllSheets(){
+function closeAllSheets(fromBackButton){
+  const wasOpen = overlay.classList.contains('show');
   overlay.classList.remove('show');
   [cartSheet, checkoutSheet, successSheet].forEach(s=>s.classList.remove('show'));
+  const detailSheetEl = document.getElementById('detailSheet');
+  const ordersSheetEl = document.getElementById('ordersSheet');
+  if(detailSheetEl) detailSheetEl.classList.remove('show');
+  if(ordersSheetEl) ordersSheetEl.classList.remove('show');
+  if(wasOpen && !fromBackButton && history.state && history.state.sheetOpen){
+    history.back();
+  }
 }
-overlay.addEventListener('click', closeAllSheets);
+window.addEventListener('popstate', ()=>{
+  closeAllSheets(true);
+  if(typeof setActiveNav === 'function' && typeof navHome !== 'undefined') setActiveNav(navHome);
+});
+overlay.addEventListener('click', ()=>{ closeAllSheets(); });
 
 cartPill.addEventListener('click', ()=>{
   renderCartLines();
@@ -874,7 +963,7 @@ Address: ${address}`;
 
 document.getElementById('closeSuccessBtn').addEventListener('click', ()=>{
   closeAllSheets();
-  renderGrid();
+  renderMain();
 });
 
 // ---------------- Product detail sheet ----------------
@@ -916,7 +1005,7 @@ document.getElementById('detailPlus').addEventListener('click', ()=>{
 document.getElementById('detailAddBtn').addEventListener('click', ()=>{
   if(!currentDetailProduct) return;
   cart[currentDetailProduct.id] = detailQty;
-  renderGrid();
+  renderMain();
   updateCartPill();
   updateNavCartBadge();
   closeAllSheets();
@@ -993,6 +1082,12 @@ function setActiveNav(el){
 navHome.addEventListener('click', ()=>{
   setActiveNav(navHome);
   closeAllSheets();
+  searchTerm = '';
+  document.getElementById('searchInput').value = '';
+  activeCategory = 'All';
+  renderChips();
+  renderMain();
+  window.scrollTo({top:0, behavior:'smooth'});
 });
 navOrders.addEventListener('click', ()=>{
   setActiveNav(navOrders);
@@ -1066,7 +1161,7 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
 });
 
 // ---------------- Init ----------------
-grid.innerHTML = `<p class="empty-msg">Loading medicines...</p>`;
+document.getElementById('homeSections').innerHTML = `<p class="empty-msg">Loading medicines...</p>`;
 
 seedProductsIfEmpty().then(()=>{
   // Listen live so any change the shop owner makes in Firestore shows up instantly
@@ -1074,11 +1169,12 @@ seedProductsIfEmpty().then(()=>{
     PRODUCTS = snapshot.docs.map(d => ({ id:d.id, ...d.data() }));
     CATEGORIES = ["All", ...new Set(PRODUCTS.map(p=>p.cat))];
     renderChips();
-    renderGrid();
+    renderMain();
     updateCartPill();
+    updateNavCartBadge();
   }, (err)=>{
     console.error(err);
-    grid.innerHTML = `<p class="empty-msg">Could not load medicines. Check your internet connection.</p>`;
+    document.getElementById('homeSections').innerHTML = `<p class="empty-msg">Could not load medicines. Check your internet connection.</p>`;
   });
 });
 </script>
