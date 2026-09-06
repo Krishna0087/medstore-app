@@ -103,34 +103,40 @@
     font-size:11.5px; color:#BFE4D9;
     margin:10px 2px 0;
   }
-  /* ---------- Category chips ---------- */
+  /* ---------- Category tiles ---------- */
   .chip-row{
-    display:flex; gap:8px;
+    display:flex; gap:14px;
     overflow-x:auto;
-    padding:16px 16px 4px;
+    padding:18px 16px 6px;
     scrollbar-width:none;
   }
   .chip-row::-webkit-scrollbar{display:none;}
-  .chip{
+  .cat-tile{
     flex:0 0 auto;
-    padding:9px 15px;
-    border-radius:999px;
-    border:1px solid var(--line);
-    background:var(--panel);
-    color:var(--ink-soft);
-    font-size:13.5px;
-    font-weight:500;
+    display:flex; flex-direction:column; align-items:center; gap:7px;
     cursor:pointer;
-    white-space:nowrap;
-    transition:background .15s, color .15s, border-color .15s, transform .1s;
+    width:64px;
   }
-  .chip:active{transform:scale(0.96);}
-  .chip.active{
-    background:var(--teal);
-    border-color:var(--teal);
-    color:#fff;
-    box-shadow:0 3px 10px rgba(15,107,92,0.25);
+  .cat-tile .cat-icon-box{
+    width:56px; height:56px; border-radius:16px;
+    background:#EFEAD9;
+    display:flex; align-items:center; justify-content:center;
+    font-size:25px;
+    border:2px solid transparent;
+    transition:background .15s, border-color .15s, transform .1s;
   }
+  .cat-tile:active .cat-icon-box{transform:scale(0.93);}
+  .cat-tile.active .cat-icon-box{
+    background:linear-gradient(135deg, var(--teal-light), var(--teal-dark));
+    border-color:var(--marigold);
+    box-shadow:0 4px 12px rgba(15,107,92,0.3);
+  }
+  .cat-tile.active .cat-icon-box .cat-emoji{filter:brightness(0) invert(1);}
+  .cat-tile .cat-label{
+    font-size:11px; font-weight:600; color:var(--ink-soft);
+    text-align:center; line-height:1.2;
+  }
+  .cat-tile.active .cat-label{color:var(--teal-dark);}
   /* ---------- Product grid ---------- */
   main{padding:6px 16px 20px;}
   .section-title{
@@ -491,7 +497,7 @@
   </div>
   <div class="cart-total-row"><span>To pay (Cash on delivery)</span><span id="checkoutTotal">₹0</span></div>
   <button class="primary-btn" id="placeOrderBtn">Place order</button>
-  <p class="pay-note">Pay in cash when your order arrives.</p>
+  <p class="pay-note">You'll confirm this order on WhatsApp before it's final. Pay cash when it arrives.</p>
 </div>
 
 <!-- Order success sheet -->
@@ -499,7 +505,7 @@
   <div class="order-success">
     <div class="tick">✓</div>
     <h2 style="margin-bottom:4px;">Order placed!</h2>
-    <p style="color:var(--ink-soft); font-size:14px; margin:0;">Sharma Medical Store will prepare your order shortly.</p>
+    <p style="color:var(--ink-soft); font-size:14px; margin:0;">WhatsApp is opening with your order details — just hit send so the shop receives it.</p>
     <p class="order-id" id="orderIdLine"></p>
     <button class="primary-btn" id="closeSuccessBtn" style="margin-top:20px;">Back to shop</button>
   </div>
@@ -616,11 +622,30 @@ const chipRow = document.getElementById('chipRow');
 const emptyMsg = document.getElementById('emptyMsg');
 const sectionTitle = document.getElementById('sectionTitle');
 
+// Maps category names to an icon. Add more mappings here if the owner uses new category names.
+const CATEGORY_ICONS = {
+  "All": "🗂️",
+  "Fever & Pain": "🤒",
+  "Cold & Cough": "🤧",
+  "Antibiotics": "💊",
+  "Wellness": "🌿",
+  "Devices": "🩺",
+  "First Aid": "🩹",
+  "Baby Care": "🍼",
+  "General": "📦",
+};
+function getCategoryIcon(cat){
+  return CATEGORY_ICONS[cat] || "📦";
+}
+
 function renderChips(){
   chipRow.innerHTML = CATEGORIES.map(c =>
-    `<div class="chip ${c===activeCategory?'active':''}" data-cat="${c}">${c}</div>`
+    `<div class="cat-tile ${c===activeCategory?'active':''}" data-cat="${c}">
+       <div class="cat-icon-box"><span class="cat-emoji">${getCategoryIcon(c)}</span></div>
+       <span class="cat-label">${c}</span>
+     </div>`
   ).join('');
-  chipRow.querySelectorAll('.chip').forEach(el=>{
+  chipRow.querySelectorAll('.cat-tile').forEach(el=>{
     el.addEventListener('click', ()=>{
       activeCategory = el.getAttribute('data-cat');
       renderChips();
@@ -770,6 +795,9 @@ document.getElementById('goCheckoutBtn').addEventListener('click', ()=>{
   cartSheet.classList.remove('show');
 });
 
+// Shop's WhatsApp number (with country code, no + or spaces) — change here if it ever changes
+const SHOP_WHATSAPP_NUMBER = "919359131359";
+
 document.getElementById('placeOrderBtn').addEventListener('click', async ()=>{
   const name = document.getElementById('custName').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
@@ -804,14 +832,37 @@ document.getElementById('placeOrderBtn').addEventListener('click', async ()=>{
       createdAt: serverTimestamp()
     });
 
-    document.getElementById('orderIdLine').textContent = `Order ID: ${orderRef.id.slice(0,8).toUpperCase()}`;
+    const orderIdShort = orderRef.id.slice(0,8).toUpperCase();
+
+    // Build WhatsApp message with order summary and send to the shop's number
+    const itemLines = orderItems.map(i => `- ${i.name} x${i.qty} = ₹${i.price*i.qty}`).join('\n');
+    const waMessage =
+`New order from Sharma Medical Store app
+Order ID: ${orderIdShort}
+
+${itemLines}
+
+Total: ₹${total}
+Payment: Cash on Delivery
+
+Customer: ${name}
+Phone: ${phone}
+Address: ${address}`;
+
+    const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+
+    document.getElementById('orderIdLine').textContent = `Order ID: ${orderIdShort}`;
     cart = {};
     updateCartPill();
+    updateNavCartBadge();
     document.getElementById('custName').value='';
     document.getElementById('custPhone').value='';
     document.getElementById('custAddress').value='';
     checkoutSheet.classList.remove('show');
     openSheet(successSheet);
+
+    // Open WhatsApp with the order pre-filled so the customer just has to hit send
+    window.open(waUrl, '_blank');
   } catch(err){
     alert("Order could not be placed. Please check your internet connection and try again.");
     console.error(err);
