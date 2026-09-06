@@ -9,18 +9,20 @@
 <style>
   :root{
     --bg:#FBF9F4; --panel:#FFFFFF; --ink:#1C2B2A; --ink-soft:#5B6B69;
-    --teal:#0F6B5C; --teal-dark:#0B4F45; --marigold:#E3A008;
+    --teal:#0F6B5C; --teal-dark:#0A3F38; --teal-light:#16876F; --marigold:#E3A008;
     --line:#E7E1D4; --danger:#B3452F;
   }
   *{box-sizing:border-box;}
   body{margin:0; background:var(--bg); color:var(--ink); font-family:'Work Sans',sans-serif; padding-bottom:40px;}
   h1,h2,h3{font-family:'Fraunces',serif; margin:0;}
   header{
-    background:var(--teal); color:#fff; padding:18px 16px;
-    border-radius:0 0 20px 20px; position:sticky; top:0; z-index:10;
+    background:linear-gradient(135deg, var(--teal-light) 0%, var(--teal) 55%, var(--teal-dark) 100%);
+    color:#fff; padding:20px 16px;
+    border-radius:0 0 22px 22px; position:sticky; top:0; z-index:10;
+    box-shadow:0 6px 20px rgba(10,63,56,0.25);
   }
-  header h1{font-size:20px;}
-  header p{margin:4px 0 0; font-size:12.5px; color:#CDE7E0;}
+  header h1{font-size:21px;}
+  header p{margin:4px 0 0; font-size:12px; color:#BFE4D9;}
   .lock-screen{
     max-width:340px; margin:80px auto; background:var(--panel);
     padding:26px; border-radius:16px; border:1px solid var(--line); text-align:center;
@@ -353,7 +355,9 @@ function renderOrders(orders){
     container.innerHTML = `<p class="empty-msg">No orders yet.</p>`;
     return;
   }
-  const statuses = ["Placed","Packed","Out for delivery","Delivered"];
+const statuses = ["Placed","Packed","Out for delivery","Delivered"];
+// To rename delivery staff later, just edit the two names below.
+const DELIVERY_BOYS = ["Delivery Boy 1", "Delivery Boy 2"];
   container.innerHTML = orders.map(o=>{
     const itemsHtml = (o.items||[]).map(i=>`<li>${i.qty} × ${i.name}</li>`).join('');
     const statusClass = "status-" + (o.status||"Placed").replace(/ /g,'-');
@@ -367,15 +371,22 @@ function renderOrders(orders){
       <div class="order-line">📍 ${o.address}</div>
       <ul class="order-items">${itemsHtml}</ul>
       <div class="order-line" style="font-weight:700; color:var(--ink);">Total: ₹${o.total}</div>
-      <select class="status-select" data-id="${o.id}">
+      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">Order status</label>
+      <select class="status-select" data-id="${o.id}" data-field="status">
         ${statuses.map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">Assign delivery</label>
+      <select class="status-select" data-id="${o.id}" data-field="deliveryBoy">
+        <option value="" ${!o.deliveryBoy?'selected':''}>Not assigned yet</option>
+        ${DELIVERY_BOYS.map(name=>`<option value="${name}" ${name===o.deliveryBoy?'selected':''}>${name}</option>`).join('')}
       </select>
     </div>`;
   }).join('');
 
   container.querySelectorAll('.status-select').forEach(sel=>{
     sel.addEventListener('change', async ()=>{
-      await updateDoc(doc(db, "orders", sel.getAttribute('data-id')), { status: sel.value });
+      const field = sel.getAttribute('data-field');
+      await updateDoc(doc(db, "orders", sel.getAttribute('data-id')), { [field]: sel.value });
     });
   });
 }
