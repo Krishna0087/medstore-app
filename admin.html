@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Sharma Medical Store — Admin</title>
+<title>शर्मा मेडिकल स्टोअर — अॅडमिन</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -94,52 +94,82 @@
 <body>
 
 <div id="lockScreen" class="lock-screen">
-  <h2>Admin login</h2>
-  <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px;">Enter the shop PIN to continue</p>
-  <input type="password" id="pinInput" placeholder="Enter PIN" maxlength="6">
-  <button class="btn btn-primary" id="pinSubmit">Unlock</button>
-  <p id="pinError" style="color:var(--danger); font-size:12.5px; display:none;">Wrong PIN, try again.</p>
+  <h2>अॅडमिन लॉगिन</h2>
+  <p style="color:var(--ink-soft); font-size:13.5px; margin-top:8px;">पुढे जाण्यासाठी दुकानाचा पिन टाका</p>
+  <input type="password" id="pinInput" placeholder="पिन टाका" maxlength="6">
+  <button class="btn btn-primary" id="pinSubmit">अनलॉक करा</button>
+  <p id="pinError" style="color:var(--danger); font-size:12.5px; display:none;">चुकीचा पिन, पुन्हा प्रयत्न करा.</p>
 </div>
 
 <div id="adminApp" style="display:none;">
   <header>
     <h1>Sharma Medical Store</h1>
-    <p>Admin panel</p>
+    <p>अॅडमिन पॅनेल</p>
   </header>
 
   <div class="tabs">
-    <div class="tab active" data-tab="products">Products</div>
-    <div class="tab" data-tab="orders">Orders</div>
+    <div class="tab active" data-tab="products">उत्पादने</div>
+    <div class="tab" data-tab="orders">ऑर्डर्स</div>
   </div>
 
   <main>
     <!-- PRODUCTS TAB -->
     <div id="tab-products">
       <div class="card">
-        <h3 style="margin-bottom:12px; font-size:15px;">Add new medicine</h3>
+        <h3 style="margin-bottom:12px; font-size:15px;">नवीन औषध जोडा</h3>
         <div class="field">
-          <label>Photo</label>
+          <label>फोटो</label>
           <input type="file" id="newPhoto" accept="image/*" capture="environment">
           <div id="photoPreview" style="margin-top:8px;"></div>
         </div>
         <div class="field">
-          <label>Medicine name</label>
-          <input type="text" id="newName" placeholder="e.g. Paracetamol 500mg">
+          <label>औषधाचे नाव</label>
+          <input type="text" id="newName" placeholder="उदा. Paracetamol 500mg">
         </div>
         <div class="field">
-          <label>Price (₹)</label>
-          <input type="number" id="newPrice" placeholder="e.g. 20">
+          <label>प्रकार (Category)</label>
+          <select id="newCat">
+            <option value="डोकेदुखी">डोकेदुखी (Headache)</option>
+            <option value="ताप">ताप (Fever)</option>
+            <option value="खोकला">खोकला (Cough)</option>
+            <option value="सर्दी">सर्दी (Cold)</option>
+            <option value="घसा खवखवणे">घसा खवखवणे (Sore Throat)</option>
+            <option value="पोटदुखी">पोटदुखी (Stomach Pain)</option>
+            <option value="गॅस आणि अ‍ॅसिडिटी">गॅस आणि अ‍ॅसिडिटी</option>
+            <option value="जुलाब">जुलाब (Loose Motion)</option>
+            <option value="बद्धकोष्ठता">बद्धकोष्ठता (Constipation)</option>
+            <option value="अंगदुखी">अंगदुखी (Body Pain)</option>
+            <option value="सांधेदुखी">सांधेदुखी (Joint Pain)</option>
+            <option value="प्रतिजैविके">प्रतिजैविके (Antibiotics)</option>
+            <option value="त्वचेची काळजी">त्वचेची काळजी (Skin Care)</option>
+            <option value="अ‍ॅलर्जी">अ‍ॅलर्जी (Allergy)</option>
+            <option value="डोळ्यांची काळजी">डोळ्यांची काळजी (Eye Care)</option>
+            <option value="कानाची काळजी">कानाची काळजी (Ear Care)</option>
+            <option value="दातांची काळजी">दातांची काळजी (Dental Care)</option>
+            <option value="मधुमेह काळजी">मधुमेह काळजी (Diabetes Care)</option>
+            <option value="रक्तदाब">रक्तदाब (Blood Pressure)</option>
+            <option value="महिलांचे आरोग्य">महिलांचे आरोग्य (Women's Health)</option>
+            <option value="बाळाची काळजी">बाळाची काळजी (Baby Care)</option>
+            <option value="आरोग्य व जीवनसत्त्वे">आरोग्य व जीवनसत्त्वे (Wellness)</option>
+            <option value="प्रथमोपचार">प्रथमोपचार (First Aid)</option>
+            <option value="उपकरणे">उपकरणे (Devices)</option>
+            <option value="सर्वसाधारण">सर्वसाधारण (General)</option>
+          </select>
         </div>
         <div class="field">
-          <label>Stock quantity (leave blank if not sure)</label>
-          <input type="number" id="newStock" placeholder="e.g. 40">
+          <label>किंमत (₹)</label>
+          <input type="number" id="newPrice" placeholder="उदा. 20">
         </div>
-        <button class="btn btn-primary" id="addProductBtn">Add medicine</button>
+        <div class="field">
+          <label>साठा (माहित नसल्यास रिकामे ठेवा)</label>
+          <input type="number" id="newStock" placeholder="उदा. 40">
+        </div>
+        <button class="btn btn-primary" id="addProductBtn">औषध जोडा</button>
         <p id="addStatus" style="font-size:12.5px; color:var(--ink-soft); margin-top:8px; display:none;"></p>
       </div>
 
       <div class="card">
-        <h3 style="margin-bottom:6px; font-size:15px;">Current stock</h3>
+        <h3 style="margin-bottom:6px; font-size:15px;">सध्याचा साठा</h3>
         <div id="productList"></div>
       </div>
     </div>
@@ -242,33 +272,34 @@ document.getElementById('newPhoto').addEventListener('change', (e)=>{
 // ---------------- Products ----------------
 document.getElementById('addProductBtn').addEventListener('click', async ()=>{
   const name = document.getElementById('newName').value.trim();
+  const cat = document.getElementById('newCat').value;
   const price = parseFloat(document.getElementById('newPrice').value);
   const stockRaw = document.getElementById('newStock').value;
   const stock = stockRaw ? parseInt(stockRaw) : 100;
   const photoFile = document.getElementById('newPhoto').files[0];
 
   if(!name || isNaN(price)){
-    alert("Please enter at least the medicine name and price.");
+    alert("कृपया किमान औषधाचे नाव आणि किंमत टाका.");
     return;
   }
 
   const btn = document.getElementById('addProductBtn');
   const statusMsg = document.getElementById('addStatus');
   btn.disabled = true;
-  btn.textContent = "Adding...";
+  btn.textContent = "जोडत आहे...";
   statusMsg.style.display = 'block';
 
   try{
     let imageUrl = null;
     if(photoFile){
-      statusMsg.textContent = "Processing photo...";
+      statusMsg.textContent = "फोटो प्रोसेस होत आहे...";
       imageUrl = await compressImage(photoFile);
     }
 
-    statusMsg.textContent = "Saving medicine...";
+    statusMsg.textContent = "औषध साठवत आहे...";
     await addDoc(productsCol, {
       name, price, stock,
-      cat: "General",
+      cat: cat,
       rx: false,
       emoji: "💊",
       imageUrl: imageUrl
@@ -279,15 +310,15 @@ document.getElementById('addProductBtn').addEventListener('click', async ()=>{
     document.getElementById('newStock').value = '';
     document.getElementById('newPhoto').value = '';
     document.getElementById('photoPreview').innerHTML = '';
-    statusMsg.textContent = "Added!";
+    statusMsg.textContent = "जोडले!";
     setTimeout(()=>{ statusMsg.style.display = 'none'; }, 1500);
   } catch(err){
-    alert("Could not add medicine. Check your internet connection.");
+    alert("औषध जोडता आले नाही. इंटरनेट कनेक्शन तपासा.");
     console.error(err);
     statusMsg.style.display = 'none';
   } finally {
     btn.disabled = false;
-    btn.textContent = "Add medicine";
+    btn.textContent = "औषध जोडा";
   }
 });
 
@@ -307,7 +338,7 @@ function startListeners(){
 function renderProductList(products){
   const container = document.getElementById('productList');
   if(products.length === 0){
-    container.innerHTML = `<p class="empty-msg">No medicines yet. Add your first one above.</p>`;
+    container.innerHTML = `<p class="empty-msg">अजून औषधे नाहीत. वरती पहिले औषध जोडा.</p>`;
     return;
   }
   container.innerHTML = products.map(p=>`
@@ -318,15 +349,15 @@ function renderProductList(products){
         <div class="pmeta">₹${p.price} · Stock: ${p.stock}</div>
       </div>
       <div class="actions">
-        <button class="btn btn-small" data-action="edit-stock" data-id="${p.id}" data-stock="${p.stock}" data-price="${p.price}">Edit</button>
-        <button class="btn btn-danger btn-small" data-action="delete" data-id="${p.id}">Delete</button>
+        <button class="btn btn-small" data-action="edit-stock" data-id="${p.id}" data-stock="${p.stock}" data-price="${p.price}">बदला</button>
+        <button class="btn btn-danger btn-small" data-action="delete" data-id="${p.id}">काढा</button>
       </div>
     </div>
   `).join('');
 
   container.querySelectorAll('[data-action="delete"]').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
-      if(confirm("Remove this medicine from the shop?")){
+      if(confirm("हे औषध दुकानातून काढायचे का?")){
         await deleteDoc(doc(db, "products", btn.getAttribute('data-id')));
       }
     });
@@ -337,9 +368,9 @@ function renderProductList(products){
       const id = btn.getAttribute('data-id');
       const currentStock = btn.getAttribute('data-stock');
       const currentPrice = btn.getAttribute('data-price');
-      const newStock = prompt("Update stock quantity:", currentStock);
+      const newStock = prompt("साठा अपडेट करा:", currentStock);
       if(newStock === null) return;
-      const newPrice = prompt("Update price (₹):", currentPrice);
+      const newPrice = prompt("किंमत अपडेट करा (₹):", currentPrice);
       if(newPrice === null) return;
       await updateDoc(doc(db, "products", id), {
         stock: parseInt(newStock),
@@ -352,7 +383,7 @@ function renderProductList(products){
 function renderOrders(orders){
   const container = document.getElementById('ordersList');
   if(orders.length === 0){
-    container.innerHTML = `<p class="empty-msg">No orders yet.</p>`;
+    container.innerHTML = `<p class="empty-msg">अजून ऑर्डर नाहीत.</p>`;
     return;
   }
 const statuses = ["Placed","Packed","Out for delivery","Delivered"];
@@ -371,13 +402,13 @@ const DELIVERY_BOYS = ["Delivery Boy 1", "Delivery Boy 2"];
       <div class="order-line">📍 ${o.address}</div>
       <ul class="order-items">${itemsHtml}</ul>
       <div class="order-line" style="font-weight:700; color:var(--ink);">Total: ₹${o.total}</div>
-      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">Order status</label>
+      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">ऑर्डर स्थिती</label>
       <select class="status-select" data-id="${o.id}" data-field="status">
         ${statuses.map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
       </select>
-      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">Assign delivery</label>
+      <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">डिलिव्हरी नेमा</label>
       <select class="status-select" data-id="${o.id}" data-field="deliveryBoy">
-        <option value="" ${!o.deliveryBoy?'selected':''}>Not assigned yet</option>
+        <option value="" ${!o.deliveryBoy?'selected':''}>अजून नेमलेले नाही</option>
         ${DELIVERY_BOYS.map(name=>`<option value="${name}" ${name===o.deliveryBoy?'selected':''}>${name}</option>`).join('')}
       </select>
     </div>`;

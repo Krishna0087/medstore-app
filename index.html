@@ -459,16 +459,16 @@
       <div class="shop-logo">S</div>
       <div>
         <h1 class="shop-name">Sharma Medical Store</h1>
-        <p class="shop-sub">Delivering to your home, since day one</p>
+        <p class="shop-sub">तुमच्या घरी डिलिव्हरी, पहिल्या दिवसापासून</p>
       </div>
     </div>
-    <div class="badge-open"><span class="dot"></span>Open now</div>
+    <div class="badge-open"><span class="dot"></span>आत्ता उघडे आहे</div>
   </div>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input id="searchInput" type="text" placeholder="Search medicines, brands, health needs">
+    <input id="searchInput" type="text" placeholder="औषधे, ब्रँड शोधा">
   </div>
-  <div class="trust-line">🚴 Delivered by our own trusted team · Pay on delivery</div>
+  <div class="trust-line">🚴 आमच्या स्वतःच्या टीमकडून डिलिव्हरी · डिलिव्हरीच्या वेळी पैसे द्या</div>
 </header>
 
 <div class="chip-row" id="chipRow"></div>
@@ -477,7 +477,7 @@
   <div id="homeSections"></div>
   <div class="section-title" id="sectionTitle" style="display:none;"></div>
   <div class="grid" id="productGrid"></div>
-  <div class="empty-msg" id="emptyMsg" style="display:none;">No products match your search.</div>
+  <div class="empty-msg" id="emptyMsg" style="display:none;">तुमच्या शोधाशी जुळणारे उत्पादन सापडले नाही.</div>
 </main>
 
 <div class="cart-pill" id="cartPill">
@@ -485,7 +485,7 @@
     <span class="count" id="cartCount">0 items</span>
     <span class="amount" id="cartAmount">₹0</span>
   </div>
-  <div class="cta">View cart →</div>
+  <div class="cta">कार्ट पहा →</div>
 </div>
 
 <div class="overlay" id="overlay"></div>
@@ -493,41 +493,41 @@
 <!-- Cart sheet -->
 <div class="sheet" id="cartSheet">
   <div class="sheet-handle"></div>
-  <h2>Your cart</h2>
+  <h2>तुमची कार्ट</h2>
   <div id="cartLines"></div>
   <div class="cart-total-row"><span>Total</span><span id="cartTotal">₹0</span></div>
-  <button class="primary-btn" id="goCheckoutBtn">Proceed to checkout</button>
+  <button class="primary-btn" id="goCheckoutBtn">चेकआउट करा</button>
 </div>
 
 <!-- Checkout sheet -->
 <div class="sheet" id="checkoutSheet">
   <div class="sheet-handle"></div>
-  <h2>Delivery details</h2>
+  <h2>डिलिव्हरीची माहिती</h2>
   <div class="field">
-    <label>Full name</label>
-    <input type="text" id="custName" placeholder="Your name">
+    <label>पूर्ण नाव</label>
+    <input type="text" id="custName" placeholder="तुमचे नाव">
   </div>
   <div class="field">
-    <label>Phone number</label>
-    <input type="tel" id="custPhone" placeholder="10-digit mobile number">
+    <label>फोन नंबर</label>
+    <input type="tel" id="custPhone" placeholder="१०-अंकी मोबाईल नंबर">
   </div>
   <div class="field">
-    <label>Delivery address</label>
-    <textarea id="custAddress" rows="3" placeholder="House no, street, landmark"></textarea>
+    <label>डिलिव्हरीचा पत्ता</label>
+    <textarea id="custAddress" rows="3" placeholder="घर नं, रस्ता, खूण"></textarea>
   </div>
-  <div class="cart-total-row"><span>To pay (Cash on delivery)</span><span id="checkoutTotal">₹0</span></div>
-  <button class="primary-btn" id="placeOrderBtn">Place order</button>
-  <p class="pay-note">You'll confirm this order on WhatsApp before it's final. Pay cash when it arrives.</p>
+  <div class="cart-total-row"><span>द्यायची रक्कम (कॅश ऑन डिलिव्हरी)</span><span id="checkoutTotal">₹0</span></div>
+  <button class="primary-btn" id="placeOrderBtn">ऑर्डर द्या</button>
+  <p class="pay-note">तुम्ही व्हॉट्सअॅपवर ही ऑर्डर कन्फर्म कराल. सामान आल्यावर रोख पैसे द्या.</p>
 </div>
 
 <!-- Order success sheet -->
 <div class="sheet" id="successSheet">
   <div class="order-success">
     <div class="tick">✓</div>
-    <h2 style="margin-bottom:4px;">Order placed!</h2>
-    <p style="color:var(--ink-soft); font-size:14px; margin:0;">WhatsApp is opening with your order details — just hit send so the shop receives it.</p>
+    <h2 style="margin-bottom:4px;">ऑर्डर दिली!</h2>
+    <p style="color:var(--ink-soft); font-size:14px; margin:0;">व्हॉट्सअॅप उघडत आहे तुमच्या ऑर्डरच्या माहितीसह — फक्त 'Send' दाबा म्हणजे दुकानाला ऑर्डर मिळेल.</p>
     <p class="order-id" id="orderIdLine"></p>
-    <button class="primary-btn" id="closeSuccessBtn" style="margin-top:20px;">Back to shop</button>
+    <button class="primary-btn" id="closeSuccessBtn" style="margin-top:20px;">दुकानात परत जा</button>
   </div>
 </div>
 
@@ -545,40 +545,40 @@
       <button id="detailPlus">+</button>
     </div>
   </div>
-  <button class="primary-btn" id="detailAddBtn">Add to cart</button>
+  <button class="primary-btn" id="detailAddBtn">कार्टमध्ये घाला</button>
 </div>
 
 <!-- Lightbox for zooming product photo -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose">✕</button>
   <img id="lightboxImg" src="">
-  <div class="lightbox-tip">Pinch or double-tap to zoom</div>
+  <div class="lightbox-tip">झूम करण्यासाठी बोटांनी पिंच करा किंवा डबल-टॅप करा</div>
 </div>
 
 <!-- My Orders sheet -->
 <div class="sheet" id="ordersSheet">
   <div class="sheet-handle"></div>
-  <h2>My orders</h2>
-  <p class="my-orders-intro">Enter the phone number you used while ordering to see your orders.</p>
+  <h2>माझ्या ऑर्डर</h2>
+  <p class="my-orders-intro">ऑर्डर करताना वापरलेला फोन नंबर टाका, तुमच्या ऑर्डर दिसतील.</p>
   <div class="field">
-    <input type="tel" id="ordersPhoneInput" placeholder="10-digit mobile number">
+    <input type="tel" id="ordersPhoneInput" placeholder="१०-अंकी मोबाईल नंबर">
   </div>
-  <button class="primary-btn" id="findOrdersBtn">Find my orders</button>
+  <button class="primary-btn" id="findOrdersBtn">माझ्या ऑर्डर शोधा</button>
   <div id="myOrdersList" style="margin-top:16px;"></div>
 </div>
 
 <div class="bottom-nav">
   <div class="nav-item active" id="navHome">
     <span class="nav-icon">🏠</span>
-    <span class="nav-label">Home</span>
+    <span class="nav-label">होम</span>
   </div>
   <div class="nav-item" id="navOrders">
     <span class="nav-icon">🧾</span>
-    <span class="nav-label">My Orders</span>
+    <span class="nav-label">माझ्या ऑर्डर</span>
   </div>
   <div class="nav-item" id="navCart">
     <span class="nav-icon">🛒</span>
-    <span class="nav-label">Cart</span>
+    <span class="nav-label">कार्ट</span>
     <span class="nav-badge" id="navCartBadge" style="display:none;"></span>
   </div>
 </div>
@@ -664,11 +664,11 @@ function buildCardHtml(p){
       : `<div class="emoji-box">${p.emoji}</div>`
     }
     <p class="pname">${p.name}</p>
-    <p class="pmeta">${lowStock ? `<span class="stock-low">Only ${p.stock} left</span>` : `In stock`}</p>
+    <p class="pmeta">${lowStock ? `<span class="stock-low">फक्त ${p.stock} शिल्लक</span>` : `स्टॉकमध्ये आहे`}</p>
     <div class="price-row">
       <span class="price">₹${p.price}</span>
       ${qty === 0
-        ? `<button class="add-btn" data-id="${p.id}">Add</button>`
+        ? `<button class="add-btn" data-id="${p.id}">घाला</button>`
         : `<div class="qty-control">
              <button data-id="${p.id}" data-action="dec">−</button>
              <span>${qty}</span>
@@ -729,7 +729,7 @@ function renderMain(){
 function renderHomeSections(){
   const cats = CATEGORIES.filter(c => c !== "All");
   if(cats.length === 0){
-    homeSections.innerHTML = `<p class="empty-msg">No medicines yet — check back soon.</p>`;
+    homeSections.innerHTML = `<p class="empty-msg">अजून औषधे नाहीत — नंतर पुन्हा पहा.</p>`;
     return;
   }
   homeSections.innerHTML = cats.map(cat=>{
@@ -739,7 +739,7 @@ function renderHomeSections(){
     <div class="home-section">
       <div class="home-section-head">
         <h3>${getCategoryIcon(cat)} ${cat}</h3>
-        <span class="see-all" data-cat="${cat}">See all →</span>
+        <span class="see-all" data-cat="${cat}">सर्व पहा →</span>
       </div>
       <div class="h-scroll-row">
         ${items.map(p => `<div class="h-card">${buildCardHtml(p)}</div>`).join('')}
@@ -756,15 +756,35 @@ function renderHomeSections(){
 // Maps category names to an icon. Add more mappings here if the owner uses new category names.
 const CATEGORY_ICONS = {
   "All": "🗂️",
-  "Fever & Pain": "🤒",
-  "Cold & Cough": "🤧",
-  "Antibiotics": "💊",
-  "Wellness": "🌿",
-  "Devices": "🩺",
-  "First Aid": "🩹",
-  "Baby Care": "🍼",
-  "General": "📦",
+  "डोकेदुखी": "🤕",
+  "ताप": "🤒",
+  "खोकला": "😷",
+  "सर्दी": "🤧",
+  "घसा खवखवणे": "🗣️",
+  "पोटदुखी": "🤢",
+  "गॅस आणि अ‍ॅसिडिटी": "🔥",
+  "जुलाब": "🚽",
+  "बद्धकोष्ठता": "🌀",
+  "अंगदुखी": "🦴",
+  "सांधेदुखी": "🦵",
+  "प्रतिजैविके": "💊",
+  "त्वचेची काळजी": "🧴",
+  "अ‍ॅलर्जी": "🌾",
+  "डोळ्यांची काळजी": "👁️",
+  "कानाची काळजी": "👂",
+  "दातांची काळजी": "🦷",
+  "मधुमेह काळजी": "🩸",
+  "रक्तदाब": "❤️",
+  "महिलांचे आरोग्य": "🌸",
+  "बाळाची काळजी": "🍼",
+  "आरोग्य व जीवनसत्त्वे": "🌿",
+  "प्रथमोपचार": "🩹",
+  "उपकरणे": "🩺",
+  "सर्वसाधारण": "📦",
 };
+function getCategoryLabel(cat){
+  return cat === "All" ? "सर्व" : cat;
+}
 function getCategoryIcon(cat){
   return CATEGORY_ICONS[cat] || "📦";
 }
@@ -773,7 +793,7 @@ function renderChips(){
   chipRow.innerHTML = CATEGORIES.map(c =>
     `<div class="cat-tile ${c===activeCategory?'active':''}" data-cat="${c}">
        <div class="cat-icon-box"><span class="cat-emoji">${getCategoryIcon(c)}</span></div>
-       <span class="cat-label">${c}</span>
+       <span class="cat-label">${getCategoryLabel(c)}</span>
      </div>`
   ).join('');
   chipRow.querySelectorAll('.cat-tile').forEach(el=>{
@@ -817,7 +837,7 @@ function cartCount(){
 const cartPill = document.getElementById('cartPill');
 function updateCartPill(){
   const count = cartCount();
-  document.getElementById('cartCount').textContent = `${count} item${count!==1?'s':''}`;
+  document.getElementById('cartCount').textContent = `${count} वस्तू`;
   document.getElementById('cartAmount').textContent = `₹${cartTotal()}`;
   cartPill.classList.toggle('show', count>0);
 }
@@ -861,7 +881,7 @@ function renderCartLines(){
   const entries = Object.entries(cart);
   const container = document.getElementById('cartLines');
   if(entries.length===0){
-    container.innerHTML = `<p class="empty-msg">Your cart is empty.</p>`;
+    container.innerHTML = `<p class="empty-msg">तुमची कार्ट रिकामी आहे.</p>`;
   } else {
     container.innerHTML = entries.map(([id,qty])=>{
       const p = PRODUCTS.find(p=>p.id==id);
@@ -892,11 +912,11 @@ document.getElementById('placeOrderBtn').addEventListener('click', async ()=>{
   const phone = document.getElementById('custPhone').value.trim();
   const address = document.getElementById('custAddress').value.trim();
   if(!name || !phone || !address){
-    alert("Please fill in your name, phone number, and address.");
+    alert("कृपया तुमचे नाव, फोन नंबर आणि पत्ता भरा.");
     return;
   }
   if(!/^\d{10}$/.test(phone)){
-    alert("Please enter a valid 10-digit phone number.");
+    alert("कृपया योग्य १०-अंकी फोन नंबर टाका.");
     return;
   }
 
@@ -953,11 +973,11 @@ Address: ${address}`;
     // Open WhatsApp with the order pre-filled so the customer just has to hit send
     window.open(waUrl, '_blank');
   } catch(err){
-    alert("Order could not be placed. Please check your internet connection and try again.");
+    alert("ऑर्डर देता आली नाही. कृपया इंटरनेट कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.");
     console.error(err);
   } finally {
     placeBtn.disabled = false;
-    placeBtn.textContent = "Place order";
+    placeBtn.textContent = "ऑर्डर द्या";
   }
 });
 
@@ -978,15 +998,15 @@ function openProductDetail(id){
 
   const photoEl = document.getElementById('detailPhoto');
   if(p.imageUrl){
-    photoEl.innerHTML = `<img src="${p.imageUrl}" id="detailImgTag"><span class="zoom-hint">Tap to zoom 🔍</span>`;
+    photoEl.innerHTML = `<img src="${p.imageUrl}" id="detailImgTag"><span class="zoom-hint">झूमसाठी टॅप करा 🔍</span>`;
   } else {
     photoEl.innerHTML = p.emoji;
   }
   document.getElementById('detailName').textContent = p.name;
   document.getElementById('detailPrice').textContent = `₹${p.price}`;
   document.getElementById('detailStock').textContent = p.stock <= 5
-    ? `Only ${p.stock} left in stock`
-    : `In stock · ${p.cat || 'General'}`;
+    ? `फक्त ${p.stock} शिल्लक`
+    : `स्टॉकमध्ये आहे · ${p.cat || 'सर्वसाधारण'}`;
   document.getElementById('detailQty').textContent = detailQty;
 
   photoEl.onclick = ()=>{ if(p.imageUrl) openLightbox(p.imageUrl); };
@@ -1118,15 +1138,15 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
   const phone = document.getElementById('ordersPhoneInput').value.trim();
   const listEl = document.getElementById('myOrdersList');
   if(!/^\d{10}$/.test(phone)){
-    alert("Please enter a valid 10-digit phone number.");
+    alert("कृपया योग्य १०-अंकी फोन नंबर टाका.");
     return;
   }
-  listEl.innerHTML = `<p class="empty-msg">Searching...</p>`;
+  listEl.innerHTML = `<p class="empty-msg">शोधत आहे...</p>`;
   try{
     const q = query(ordersCol, where("phone", "==", phone), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
     if(snap.empty){
-      listEl.innerHTML = `<p class="empty-msg">No orders found for this number.</p>`;
+      listEl.innerHTML = `<p class="empty-msg">या नंबरसाठी कोणतीही ऑर्डर सापडली नाही.</p>`;
       return;
     }
     listEl.innerHTML = snap.docs.map(d=>{
@@ -1137,18 +1157,18 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
       return `
       <div class="order-card">
         <div class="order-card-head">
-          <span class="order-card-id">Order #${d.id.slice(0,8).toUpperCase()}</span>
+          <span class="order-card-id">ऑर्डर #${d.id.slice(0,8).toUpperCase()}</span>
           <span class="order-status-badge ${statusClass}">${o.status || 'Placed'}</span>
         </div>
         <ul class="order-card-items">${itemsHtml}</ul>
-        <div class="order-card-total">Total: ₹${o.total}</div>
-        ${canCancel ? `<button class="cancel-btn" data-order-id="${d.id}">Cancel this order</button>` : ''}
+        <div class="order-card-total">एकूण: ₹${o.total}</div>
+        ${canCancel ? `<button class="cancel-btn" data-order-id="${d.id}">ही ऑर्डर रद्द करा</button>` : ''}
       </div>`;
     }).join('');
 
     listEl.querySelectorAll('.cancel-btn').forEach(btn=>{
       btn.addEventListener('click', async ()=>{
-        if(confirm("Cancel this order?")){
+        if(confirm("ही ऑर्डर रद्द करायची का?")){
           await updateDoc(doc(db, "orders", btn.getAttribute('data-order-id')), { status: "Cancelled" });
           document.getElementById('findOrdersBtn').click();
         }
@@ -1156,12 +1176,12 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
     });
   } catch(err){
     console.error(err);
-    listEl.innerHTML = `<p class="empty-msg">Could not load orders. Check your internet connection.</p>`;
+    listEl.innerHTML = `<p class="empty-msg">ऑर्डर लोड होऊ शकल्या नाहीत. इंटरनेट कनेक्शन तपासा.</p>`;
   }
 });
 
 // ---------------- Init ----------------
-document.getElementById('homeSections').innerHTML = `<p class="empty-msg">Loading medicines...</p>`;
+document.getElementById('homeSections').innerHTML = `<p class="empty-msg">औषधे लोड होत आहेत...</p>`;
 
 seedProductsIfEmpty().then(()=>{
   // Listen live so any change the shop owner makes in Firestore shows up instantly
@@ -1174,7 +1194,7 @@ seedProductsIfEmpty().then(()=>{
     updateNavCartBadge();
   }, (err)=>{
     console.error(err);
-    document.getElementById('homeSections').innerHTML = `<p class="empty-msg">Could not load medicines. Check your internet connection.</p>`;
+    document.getElementById('homeSections').innerHTML = `<p class="empty-msg">औषधे लोड होऊ शकली नाहीत. इंटरनेट कनेक्शन तपासा.</p>`;
   });
 });
 </script>
