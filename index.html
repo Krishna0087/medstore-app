@@ -545,7 +545,7 @@
       <button id="detailPlus">+</button>
     </div>
   </div>
-  <button class="primary-btn" id="detailAddBtn">BUY</button>
+  <button class="primary-btn" id="detailAddBtn">कार्टमध्ये घाला</button>
 </div>
 
 <!-- Lightbox for zooming product photo -->
@@ -668,7 +668,7 @@ function buildCardHtml(p){
     <div class="price-row">
       <span class="price">₹${p.price}</span>
       ${qty === 0
-        ? `<button class="add-btn" data-id="${p.id}">घाला</button>`
+        ? `<button class="add-btn" data-id="${p.id}">खरेदी करा</button>`
         : `<div class="qty-control">
              <button data-id="${p.id}" data-action="dec">−</button>
              <span>${qty}</span>
