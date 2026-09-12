@@ -1186,7 +1186,7 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
     });
   } catch(err){
     console.error(err);
-    listEl.innerHTML = `<p class="empty-msg">ऑर्डर लोड होऊ शकल्या नाहीत. इंटरनेट कनेक्शन तपासा.</p>`;
+    listEl.innerHTML = `<p class="empty-msg">त्रुटी: ${err.message || err}</p>`;
   }
 });
 
