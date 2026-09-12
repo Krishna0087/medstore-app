@@ -1146,13 +1146,20 @@ document.getElementById('findOrdersBtn').addEventListener('click', async ()=>{
   }
   listEl.innerHTML = `<p class="empty-msg">शोधत आहे...</p>`;
   try{
-    const q = query(ordersCol, where("phone", "==", phone), orderBy("createdAt", "desc"));
+    // Only filter by phone here (no orderBy) so this works without needing
+    // a special Firestore composite index — we sort the results ourselves below.
+    const q = query(ordersCol, where("phone", "==", phone));
     const snap = await getDocs(q);
     if(snap.empty){
       listEl.innerHTML = `<p class="empty-msg">या नंबरसाठी कोणतीही ऑर्डर सापडली नाही.</p>`;
       return;
     }
-    listEl.innerHTML = snap.docs.map(d=>{
+    const docsSorted = snap.docs.slice().sort((a, b)=>{
+      const ta = a.data().createdAt?.toMillis ? a.data().createdAt.toMillis() : 0;
+      const tb = b.data().createdAt?.toMillis ? b.data().createdAt.toMillis() : 0;
+      return tb - ta;
+    });
+    listEl.innerHTML = docsSorted.map(d=>{
       const o = d.data();
       const itemsHtml = (o.items||[]).map(i=>`<li>${i.qty} × ${i.name}</li>`).join('');
       const statusClass = "os-" + (o.status||"Placed").replace(/ /g,'-');
