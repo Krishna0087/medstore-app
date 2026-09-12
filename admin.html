@@ -403,7 +403,7 @@ const DELIVERY_BOYS = ["Delivery Boy 1", "Delivery Boy 2"];
       <ul class="order-items">${itemsHtml}</ul>
       <div class="order-line" style="font-weight:700; color:var(--ink);">Total: ₹${o.total}</div>
       <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">ऑर्डर स्थिती</label>
-      <select class="status-select" data-id="${o.id}" data-field="status">
+      <select class="status-select" data-id="${o.id}" data-field="status" data-phone="${o.phone}">
         ${statuses.map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
       </select>
       <label style="font-size:11.5px; color:var(--ink-soft); display:block; margin-top:10px;">डिलिव्हरी नेमा</label>
@@ -414,10 +414,30 @@ const DELIVERY_BOYS = ["Delivery Boy 1", "Delivery Boy 2"];
     </div>`;
   }).join('');
 
+  // Marathi status wording shown to the customer in the WhatsApp message
+  const STATUS_MESSAGE_MARATHI = {
+    "Placed": "तुमची ऑर्डर मिळाली आहे.",
+    "Packed": "तुमची ऑर्डर पॅक झाली आहे.",
+    "Out for delivery": "तुमची ऑर्डर डिलिव्हरीसाठी निघाली आहे.",
+    "Delivered": "तुमची ऑर्डर डिलिव्हर झाली आहे. धन्यवाद!"
+  };
+
   container.querySelectorAll('.status-select').forEach(sel=>{
     sel.addEventListener('change', async ()=>{
       const field = sel.getAttribute('data-field');
-      await updateDoc(doc(db, "orders", sel.getAttribute('data-id')), { [field]: sel.value });
+      const orderId = sel.getAttribute('data-id');
+      await updateDoc(doc(db, "orders", orderId), { [field]: sel.value });
+
+      // When the order status changes, open WhatsApp to the customer's number
+      // with a ready-made status update — just tap Send.
+      if(field === 'status'){
+        const phone = sel.getAttribute('data-phone');
+        const orderShort = orderId.slice(0,8).toUpperCase();
+        const statusText = STATUS_MESSAGE_MARATHI[sel.value] || `स्थिती अपडेट: ${sel.value}`;
+        const msg = `जय भवानी मेडिकल, चांदेकसारे\nऑर्डर #${orderShort}\n\n${statusText}`;
+        const waUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+      }
     });
   });
 }
