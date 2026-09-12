@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#4F46E5">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Sharma Medical Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -525,9 +529,10 @@
   <div class="order-success">
     <div class="tick">✓</div>
     <h2 style="margin-bottom:4px;">ऑर्डर दिली!</h2>
-    <p style="color:var(--ink-soft); font-size:14px; margin:0;">व्हॉट्सअॅप उघडत आहे तुमच्या ऑर्डरच्या माहितीसह — फक्त 'Send' दाबा म्हणजे दुकानाला ऑर्डर मिळेल.</p>
+    <p style="color:var(--ink-soft); font-size:14px; margin:0;">दुकानाला ऑर्डर पोहोचवण्यासाठी खालील बटण दाबून व्हॉट्सअॅपवर पाठवा.</p>
     <p class="order-id" id="orderIdLine"></p>
-    <button class="primary-btn" id="closeSuccessBtn" style="margin-top:20px;">दुकानात परत जा</button>
+    <a id="waConfirmBtn" href="#" target="_blank" class="primary-btn" style="display:block; text-decoration:none; text-align:center; margin-top:20px; background:#25D366;">🟢 व्हॉट्सअॅपवर ऑर्डर पाठवा</a>
+    <button class="primary-btn" id="closeSuccessBtn" style="margin-top:10px; background:var(--panel); color:var(--teal-dark); border:1px solid var(--line);">दुकानात परत जा</button>
   </div>
 </div>
 
@@ -961,6 +966,7 @@ Address: ${address}`;
     const waUrl = `https://wa.me/${SHOP_WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
 
     document.getElementById('orderIdLine').textContent = `Order ID: ${orderIdShort}`;
+    document.getElementById('waConfirmBtn').href = waUrl;
     cart = {};
     updateCartPill();
     updateNavCartBadge();
@@ -969,9 +975,6 @@ Address: ${address}`;
     document.getElementById('custAddress').value='';
     checkoutSheet.classList.remove('show');
     openSheet(successSheet);
-
-    // Open WhatsApp with the order pre-filled so the customer just has to hit send
-    window.open(waUrl, '_blank');
   } catch(err){
     alert("ऑर्डर देता आली नाही. कृपया इंटरनेट कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.");
     console.error(err);
@@ -1197,6 +1200,14 @@ seedProductsIfEmpty().then(()=>{
     document.getElementById('homeSections').innerHTML = `<p class="empty-msg">औषधे लोड होऊ शकली नाहीत. इंटरनेट कनेक्शन तपासा.</p>`;
   });
 });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW registration failed:', err));
+    });
+  }
 </script>
 
 </body>
