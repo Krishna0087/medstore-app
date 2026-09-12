@@ -1,7 +1,7 @@
 {
-  "name": "Sharma Medical Store",
-  "short_name": "Sharma Medical",
-  "description": "Order medicines online from Sharma Medical Store — fast delivery, cash on delivery.",
+  "name": "Jay Bhavani Medical",
+  "short_name": "Jay Bhavani",
+  "description": "Order medicines online from Jay Bhavani Medical, Chandekasare — fast delivery, cash on delivery.",
   "start_url": "/medstore-app/",
   "scope": "/medstore-app/",
   "display": "standalone",
